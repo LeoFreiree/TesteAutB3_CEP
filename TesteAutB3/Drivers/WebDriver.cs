@@ -26,6 +26,12 @@ namespace TesteAutB3.Drivers
             return _driver;
         }
 
+        public static void alterarTela()
+        {
+            string currentWindow = WebDriver.GetDriver().WindowHandles.Last();
+            WebDriver.GetDriver().SwitchTo().Window(currentWindow);
+        }
+
         public static void QuitDriver()
         {
             if (_driver != null)

@@ -11,10 +11,10 @@ using WebDriver = TesteAutB3.Drivers.WebDriver;
 namespace TesteAutB3.StepDefinitions
 {
     [Binding]
-    public class BuscarCEPNoSiteDosCorreiosStepDefinitions
+    public class BuscarCepCorreiosStepDefinitions
     {
         private readonly ScenarioContext _scenarioContext;
-        public BuscarCEPNoSiteDosCorreiosStepDefinitions(ScenarioContext scenarioContext)
+        public BuscarCepCorreiosStepDefinitions(ScenarioContext scenarioContext)
         {
             _scenarioContext = scenarioContext;
         }
@@ -61,42 +61,17 @@ namespace TesteAutB3.StepDefinitions
             asserts.VerifyInvalidCep();
         }
 
-        [When(@"eu clico no botão nova busca")]
-        public void WhenEuClicoNoBotaoNovaBusca()
-        {
-            buscaCepPage.btnNovaBusca.Click();
-        }
-
         [When(@"eu digito um cep válido")]
         public void WhenEuDigitoUmCepValido()
         {
             buscaCepPage.cxInsiraCep.SendKeys(Constants.CEP_VALIDO);
         }
 
-        [When(@"eu aguardo a resolução do captcha novamente")]
-        public void WhenEuAguardoAResolucaoDoCaptchaNovamente()
+        [Then(@"eu devo visualizar o endereço correspondente ao CEP ""([^""]*)""")]
+        public void ThenEuDevoVisualizarOEnderecoCorrespondenteAoCEP(string p0)
         {
-            //Aguardando a resolução do captcha manualmente
-            Thread.Sleep(6000);
-        }
-
-        [When(@"eu clico no botão buscar novamente")]
-        public void WhenEuClicoNoBotaoBuscarNovamente()
-        {
-            buscaCepPage.btnBuscar.Click();
-        }
-
-        [Then(@"eu devo visualizar o endereço correspondente ao CEP ""(.*)""")]
-        public void ThenEuDevoVisualizarOEnderecoCorrespondenteAoCEP(string enderecoCadastrado)
-        {
-            _scenarioContext["endereco"] = enderecoCadastrado;
-            asserts.VerifyEndereco(enderecoCadastrado);
-        }
-
-        [When(@"eu volto para a pagina inicial")]
-        public void WhenEuVoltoParaAPaginaInicial()
-        {
-            buscaCepPage.voltarPagInicialIcon.Click();
+            _scenarioContext["endereco"] = p0;
+            asserts.VerifyEndereco(p0);
         }
 
         [When(@"eu insiro o código de rastreio")]
@@ -111,18 +86,10 @@ namespace TesteAutB3.StepDefinitions
             homePage.btnRastrear.Click();
         }
 
-        [When(@"eu aguardo a resolução do captcha para a tela de rastreio")]
-        public void WhenEuAguardoAResolucaoDoCaptchaParaATelaDeRastreio()
-        {
-            //aguardando a resolução do captcha manualmente
-            Thread.Sleep(6000);
-        }
-
         [When(@"eu clico no botão consultar")]
         public void WhenEuClicoNoBotaoConsultar()
         {
-            string currentWindow = WebDriver.GetDriver().WindowHandles.Last();
-            WebDriver.GetDriver().SwitchTo().Window(currentWindow);
+            WebDriver.alterarTela();//mantem o foco na aba que foi aberta
             homePage.btnConsultar.Click();
         }
 
